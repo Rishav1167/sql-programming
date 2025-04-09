@@ -21,3 +21,14 @@ values
     (1,'Rishav',150000.0,'2003-1-29'),
     (2,'Anmol',120000.0,'2003-10-9'),
     (3,'Ankit',100000.0,'2002-7-2');
+
+-- # UC 4 - Ability to retrieve all the employee payroll data
+SELECT * FROM employee_payroll;
+
+-- +--+------+------+----------+
+-- |id|name  |salary|start_date|
+-- +--+------+------+----------+
+-- |1 |Rishav|150000|2003-01-29|
+-- |2 |Anmol |120000|2003-10-09|
+-- |3 |Ankit |100000|2002-07-02|
+-- +--+------+------+----------+
