@@ -32,3 +32,11 @@ SELECT * FROM employee_payroll;
 -- |2 |Anmol |120000|2003-10-09|
 -- |3 |Ankit |100000|2002-07-02|
 -- +--+------+------+----------+
+
+-- # UC 5 - Ability to retrieve salary data for a particular employee as well as all employees who have joined in a particular data range
+SELECT salary FROM employee_payroll where name='Rishav';
+-- +------+
+-- |salary|
+-- +------+
+-- |150000|
+-- +------+
