@@ -40,3 +40,13 @@ SELECT salary FROM employee_payroll where name='Rishav';
 -- +------+
 -- |150000|
 -- +------+
+
+SELECT * FROM employee_payroll WHERE start_date BETWEEN CAST('2001-01-01' AS DATE) AND DATE(NOW());
+
+-- +--+------+------+----------+
+-- |id|name  |salary|start_date|
+-- +--+------+------+----------+
+-- |1 |Rishav|150000|2003-01-29|
+-- |2 |Anmol |120000|2003-10-09|
+-- |3 |Ankit |100000|2002-07-02|
+-- +--+------+------+----------+
