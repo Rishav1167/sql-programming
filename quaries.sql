@@ -45,3 +45,12 @@ select * from address_book;
 -- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
 -- +----------+---------+---------------+----+-----+------+----------+-----------------+
 
+
+-- # UC4 - edit existing contact person using their name
+UPDATE address_book SET zip='100211' WHERE first_name='Rishav';
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |first_name|last_name|address        |city|state|zip   |phone     |email            |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |
+-- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100211|8219764722|test@testmail.com|
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
