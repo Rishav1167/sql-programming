@@ -111,3 +111,15 @@ UPDATE address_book SET type='friend' WHERE state='NSW';
 -- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|friend|
 -- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |friend|
 -- +----------+---------+---------------+----+-----+------+----------+-----------------+------+
+
+
+-- # UC10 - get number of contact persons
+
+SELECT type, COUNT(type) FROM address_book GROUP BY type;
+
+-- +------+-----------+
+-- |type  |COUNT(type)|
+-- +------+-----------+
+-- |friend|2          |
+-- +------+-----------+
+
