@@ -98,3 +98,16 @@ SELECT * FROM address_book WHERE city='SYD' ORDER BY first_name DESC;
 -- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
 -- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |
 -- +----------+---------+---------------+----+-----+------+----------+-----------------+
+
+
+-- # UC9 - identify each Address Book with name and Type.
+
+ALTER TABLE address_book ADD COLUMN type VARCHAR(20);
+
+UPDATE address_book SET type='friend' WHERE state='NSW';
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+------+
+-- |first_name|last_name|address        |city|state|zip   |phone     |email            |type  |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+------+
+-- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|friend|
+-- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |friend|
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+------+
