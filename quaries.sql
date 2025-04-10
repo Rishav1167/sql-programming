@@ -87,3 +87,14 @@ SELECT COUNT(city) FROM address_book GROUP BY city;
 -- +-----------+
 -- |2          |
 -- +-----------+
+
+
+-- # UC8 - retrieve entries sorted alphabetically by Person’s name for a given city
+
+SELECT * FROM address_book WHERE city='SYD' ORDER BY first_name DESC;
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |first_name|last_name|address        |city|state|zip   |phone     |email            |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
+-- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
