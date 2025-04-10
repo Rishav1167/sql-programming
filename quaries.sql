@@ -16,3 +16,32 @@ CREATE TABLE address_book (
 );
 
 
+-- # UC3 - insert new Contacts to Address Book
+
+INSERT INTO address_book VALUES
+    ('Anmol',
+      'Dhiman',
+      '32, West Avenue',
+      'SYD',
+      'NSW',
+      '100211',
+      '8319832222',
+      'test@test.com'),
+     ('Rishav',
+      'Thakur',
+      '42, East Avenue',
+      'SYD',
+      'NSW',
+      '100210',
+      '8219764722',
+      'test@testmail.com');
+
+select * from address_book;    
+
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |first_name|last_name|address        |city|state|zip   |phone     |email            |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |
+-- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+
