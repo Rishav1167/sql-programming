@@ -127,33 +127,8 @@ SELECT type, COUNT(type) FROM address_book GROUP BY type;
 
 -- # UC11 - add person to both Friend and Family
 
-CREATE TABLE address_type(
-    id int NOT NULL UNIQUE AUTO_INCREMENT,
-    first_name VARCHAR(10),
-    contact_type VARCHAR(20),
-    primary key (id),
-    foreign key (first_name) REFERENCES address_book(first_name)
-);
-
 INSERT INTO address_type VALUES
     (1, 'Anmol', 'Family'),
     (2, 'Anmol', 'Friend'),
     (3, 'Rishav', 'Friend');
 
--- +--+----------+------------+
--- |id|first_name|contact_type|
--- +--+----------+------------+
--- |1 |Anmol     |Family      |
--- |2 |Anmol     |Friend      |
--- |3 |Rishav    |Friend      |
--- +--+----------+------------+
-
-SELECT * FROM address_book ab LEFT JOIN address_type at ON ab.first_name = at.first_name;
-
--- +----------+---------+---------------+----+-----+------+----------+-----------------+------+--+----------+------------+
--- |first_name|last_name|address        |city|state|zip   |phone     |email            |type  |id|first_name|contact_type|
--- +----------+---------+---------------+----+-----+------+----------+-----------------+------+--+----------+------------+
--- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|friend|3 |Rishav    |Friend      |
--- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |friend|1 |Anmol     |Family      |
--- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |friend|2 |Anmol     |Friend      |
--- +----------+---------+---------------+----+-----+------+----------+-----------------+------+--+----------+------------+
