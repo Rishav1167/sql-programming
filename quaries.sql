@@ -66,3 +66,14 @@ DELETE FROM address_book WHERE first_name='Anmol';
 -- +----------+---------+---------------+----+-----+------+----------+-----------------+
 -- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
 -- +----------+---------+---------------+----+-----+------+----------+-----------------+
+
+
+-- # UC6 - Retrieve Person belonging to a City or State
+
+SELECT * FROM address_book WHERE city='SYD';
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |first_name|last_name|address        |city|state|zip   |phone     |email            |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
+-- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
+-- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |
+-- +----------+---------+---------------+----+-----+------+----------+-----------------+
