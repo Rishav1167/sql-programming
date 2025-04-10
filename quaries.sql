@@ -77,3 +77,13 @@ SELECT * FROM address_book WHERE city='SYD';
 -- |Rishav    |Thakur   |42, East Avenue|SYD |NSW  |100210|8219764722|test@testmail.com|
 -- |Anmol     |Dhiman   |32, West Avenue|SYD |NSW  |100211|8319832222|test@test.com    |
 -- +----------+---------+---------------+----+-----+------+----------+-----------------+
+
+
+-- # UC7 - understand the size of address book by City and State
+
+SELECT COUNT(city) FROM address_book GROUP BY city;
+-- +-----------+
+-- |COUNT(city)|
+-- +-----------+
+-- |2          |
+-- +-----------+
