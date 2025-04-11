@@ -1,25 +1,18 @@
 package com.payroll;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import com.payroll.dtos.EmployeePayrollDTOS;
+import com.payroll.services.PayrollServices;
+
+
+import java.util.List;
 
 public class Main {
-    public static final String dburl=System.getenv("DATABASE_URL");
-    public static final String dbUser=System.getenv("DATABASE_USER");
-    public static final String dbPass=System.getenv("DATABASE_PASSWORD");
-
-
     public static void main(String[] args) {
+        List<EmployeePayrollDTOS> employeePayroll = PayrollServices.getEmployeePayrolls();
 
-        try {
-            Connection con= DriverManager.getConnection(dburl,dbUser,dbPass);
-            boolean isReachable= con.isValid(1);
-            System.out.println("Connected to database  is " + (isReachable ? "Successful" : "not Successful"));
+        for (EmployeePayrollDTOS employeePayrollDto : employeePayroll) {
+            System.out.println(employeePayrollDto);
         }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
     }
 }
