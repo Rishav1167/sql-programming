@@ -26,6 +26,6 @@ public class Payroll {
 
     @Override
     public String toString() {
-        return "[ Payroll id: " + payroll_id + "Salary: " + salary+"]";
+        return "[ Payroll id: " + payroll_id + " Salary: " + salary+"]";
     }
 }
