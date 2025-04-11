@@ -1,7 +1,5 @@
 package com.payroll.entities;
 
-
-
 public class Payroll {
     int payroll_id;
     double basic_pay;

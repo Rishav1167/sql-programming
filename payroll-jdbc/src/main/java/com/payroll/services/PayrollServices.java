@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 public class PayrollServices {
@@ -25,7 +26,7 @@ public class PayrollServices {
             LEFT JOIN payroll p ON e.id = p.employee_id
         """;
 
-        try (Connection conn = DbService.getConnection()) {
+        try (Connection conn = DbService.getInstance().getConnection()) {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
@@ -50,7 +51,7 @@ public class PayrollServices {
             LEFT JOIN payroll p ON e.id = p.employee_id
             WHERE e.id = ?
         """;
-        try (Connection conn = DbService.getConnection()) {
+        try (Connection conn = DbService.getInstance().getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, employee_id);
             ResultSet rs = stmt.executeQuery();
@@ -81,7 +82,7 @@ public class PayrollServices {
         WHERE payroll_id = (SELECT id FROM employee WHERE name = ?)
     """;
 
-        try (Connection conn = DbService.getConnection()) {
+        try (Connection conn = DbService.getInstance().getConnection()) {
             // Step 1: Fetch and print previous salary
             try (PreparedStatement selectStmt = conn.prepareStatement(selectQuery)) {
                 selectStmt.setString(1, name);
@@ -117,5 +118,34 @@ public class PayrollServices {
         }
     }
 
+    public static List<EmployeePayrollDTOS> getEmployeesByDateRange(Date start , Date end ) throws EmployeePayrollException {
+
+        List<EmployeePayrollDTOS> employeePayrolls = new ArrayList<>();
+
+        String query = """
+        SELECT * FROM employee e
+        JOIN department d ON e.dept_id = d.dept_id
+        LEFT JOIN contact c ON e.id = c.employee_id
+        LEFT JOIN payroll p ON e.id = p.employee_id
+        WHERE e.start_date BETWEEN ? AND ?
+    """;
+
+        try (Connection conn = DbService.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setDate(1, start);
+            stmt.setDate(2, end);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    employeePayrolls.add(ToEmployeePayrollDto.map(rs));
+                }
+            }
+
+        } catch (Exception e) {
+            throw new EmployeePayrollException("Error retrieving employees by date range: " + e.getMessage());
+        }
+        return employeePayrolls;
+    }
 
 }

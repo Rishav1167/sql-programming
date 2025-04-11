@@ -10,12 +10,29 @@ public class DbService {
     public static final String dbUser = System.getenv("DATABASE_USER");
     public static final String dbPass = System.getenv("DATABASE_PASSWORD");
 
+    public static DbService instance;
 
-    public static  Connection getConnection() throws SQLException {
+    private DbService() {}
 
-        Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPass);
-        boolean isReachable = con.isValid(1);
-        System.out.println("Connected to database  is " + (isReachable ? "Successful" : "not Successful"));
-        return con;
+    public static synchronized DbService getInstance(){
+        if(instance == null){
+            instance = new DbService();
+        }
+        return instance;
     }
+
+
+    public  Connection getConnection() throws SQLException {
+         return DriverManager.getConnection(dbUrl, dbUser, dbPass);
+
+    }
+    public void isConnectionValid() {
+        try (Connection conn = getConnection()) {
+            boolean valid = conn != null && conn.isValid(1);
+            System.out.println("Database connection was " + (valid ? "successful" : "unsuccessful"));
+        } catch (SQLException e) {
+            System.out.println("Database connection failed: " + e.getMessage());
+
+        }
+}
 }
