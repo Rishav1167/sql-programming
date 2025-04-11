@@ -2,14 +2,12 @@ package com.payroll.services;
 
 import com.payroll.Exceptions.EmployeePayrollException;
 import com.payroll.dtos.EmployeePayrollDTOS;
+import com.payroll.dtos.PayrollAnalysisDTO;
 import com.payroll.mapping.ToEmployeePayrollDto;
+import com.payroll.mapping.ToPayrollAnalysisDto;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 
 public class PayrollServices {
@@ -146,6 +144,36 @@ public class PayrollServices {
             throw new EmployeePayrollException("Error retrieving employees by date range: " + e.getMessage());
         }
         return employeePayrolls;
+    }
+
+    public static List<PayrollAnalysisDTO> getPayrollAnalysisByGender() throws EmployeePayrollException {
+        List<PayrollAnalysisDTO> analysisList = new ArrayList<>();
+
+        String query = """
+        SELECT gender,
+               SUM(salary) AS total_salary,
+               AVG(salary) AS average_salary,
+               MIN(salary) AS min_salary,
+               MAX(salary) AS max_salary,
+               COUNT(*) AS employee_count
+        FROM employee e
+        JOIN payroll p ON e.id = p.employee_id
+        GROUP BY gender
+    """;
+
+        try (Connection conn = DbService.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                analysisList.add(ToPayrollAnalysisDto.map(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new EmployeePayrollException("Error fetching payroll analysis: " + e.getMessage());
+        }
+
+        return analysisList;
     }
 
 }

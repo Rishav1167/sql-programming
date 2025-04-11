@@ -1,5 +1,10 @@
 package com.payroll.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Payroll {
     int payroll_id;
     double basic_pay;

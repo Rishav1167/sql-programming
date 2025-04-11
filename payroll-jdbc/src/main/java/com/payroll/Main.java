@@ -3,6 +3,7 @@ package com.payroll;
 
 import com.payroll.Exceptions.EmployeePayrollException;
 import com.payroll.dtos.EmployeePayrollDTOS;
+import com.payroll.dtos.PayrollAnalysisDTO;
 import com.payroll.services.DbService;
 import com.payroll.services.PayrollServices;
 
@@ -30,5 +31,10 @@ public class Main {
             System.out.println(employee);
         }
 
+        // UC 6
+        List<PayrollAnalysisDTO> payrollAnalysis = PayrollServices.getPayrollAnalysisByGender();
+        for (PayrollAnalysisDTO payrollAnalysisDto : payrollAnalysis) {
+            System.out.println(payrollAnalysisDto);
+        }
     }
 }
