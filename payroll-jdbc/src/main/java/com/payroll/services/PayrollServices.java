@@ -5,6 +5,7 @@ import com.payroll.dtos.EmployeePayrollDTOS;
 import com.payroll.dtos.PayrollAnalysisDTO;
 import com.payroll.mapping.ToEmployeePayrollDto;
 import com.payroll.mapping.ToPayrollAnalysisDto;
+import com.payroll.entities.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -175,5 +176,103 @@ public class PayrollServices {
 
         return analysisList;
     }
+    public static void addEmployeeWithDetails(Employee employee, Contacts contact, Payroll payroll) throws EmployeePayrollException {
+        String insertEmpSQL = "INSERT INTO employee (name, gender, start_date, dept_id) VALUES (?, ?, ?, ?)";
+        String insertContactSQL = "INSERT INTO contact (phone, email, address, employee_id) VALUES (?, ?, ?, ?)";
+        String insertPayrollSQL = "INSERT INTO payroll (basic_pay, deductions, taxable_pay, income_tax, net_pay, salary, employee_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DbService.getInstance().getConnection()) {
+            conn.setAutoCommit(false); // Begin transaction
+
+            int employeeId;
+
+            // Insert into employee table
+            try (PreparedStatement empStmt = conn.prepareStatement(insertEmpSQL, Statement.RETURN_GENERATED_KEYS)) {
+                empStmt.setString(1, employee.getFirst_name());
+                empStmt.setString(2, employee.getGender());
+                empStmt.setDate(3, employee.getStart_date());
+                empStmt.setInt(4, employee.getDepartment_id());
+
+                int rowsAffected = empStmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    conn.rollback();
+                    throw new EmployeePayrollException("Failed to insert employee.");
+                }
+
+                try (ResultSet rs = empStmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        employeeId = rs.getInt(1);
+                    } else {
+                        conn.rollback();
+                        throw new EmployeePayrollException("Failed to retrieve employee ID.");
+                    }
+                }
+            }
+
+            // Insert into contact table
+            try (PreparedStatement contactStmt = conn.prepareStatement(insertContactSQL)) {
+                contactStmt.setString(1, contact.getPhone_number());
+                contactStmt.setString(2, contact.getEmail());
+                contactStmt.setString(3, contact.getAddress());
+                contactStmt.setInt(4, employeeId);
+                contactStmt.executeUpdate();
+            }
+
+            // Insert into payroll table  according to UC 8
+            double salary = payroll.getSalary();
+            double deduction = salary * 0.2;
+            double taxablePay = salary - deduction;
+            double incomeTax = taxablePay * 0.1;
+            double netPay = salary - incomeTax;
+            double basicPay = salary;
+            try (PreparedStatement payrollStmt = conn.prepareStatement(insertPayrollSQL)) {
+                payrollStmt.setDouble(1, basicPay);
+                payrollStmt.setDouble(2, deduction);
+                payrollStmt.setDouble(3, taxablePay);
+                payrollStmt.setDouble(4, incomeTax);
+                payrollStmt.setDouble(5, netPay);
+                payrollStmt.setDouble(6, salary);
+                payrollStmt.setInt(7, employeeId);
+                payrollStmt.executeUpdate();
+            }
+
+            conn.commit(); // All went well, commit it
+
+        } catch (SQLException e) {
+            throw new EmployeePayrollException("Error while inserting employee with details: " + e.getMessage());
+        }
+    }
+
+    public static void deleteEmployee(int employeeId) throws EmployeePayrollException {
+        String deleteEmpSQL = "DELETE FROM employee WHERE id = ?";
+
+        try (Connection conn = DbService.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(deleteEmpSQL)) {
+
+            stmt.setInt(1, employeeId);
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new EmployeePayrollException("No employee found with ID: " + employeeId);
+            }
+
+            System.out.println("Employee and related records deleted successfully.");
+
+        } catch (SQLException e) {
+            throw new EmployeePayrollException("Error deleting employee: " + e.getMessage());
+        }
+    }
+
+    public static void removeEmployee(int employeeId) throws EmployeePayrollException {
+        String query = "UPDATE employee SET is_active = FALSE WHERE id = ?";
+        try (Connection conn = DbService.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, employeeId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new EmployeePayrollException(e.getMessage());
+        }
+    }
+
 
 }

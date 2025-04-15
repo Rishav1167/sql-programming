@@ -6,16 +6,18 @@ import com.payroll.dtos.EmployeePayrollDTOS;
 import com.payroll.dtos.PayrollAnalysisDTO;
 import com.payroll.services.DbService;
 import com.payroll.services.PayrollServices;
+import com.payroll.entities.*;
 
 import java.sql.Date;
 import java.util.List;
 
 public class Main {
+    static List<EmployeePayrollDTOS>employeePayroll;
     public static void main(String[] args) throws EmployeePayrollException {
 
         // UC 1-2
         DbService.getInstance().isConnectionValid();
-        List<EmployeePayrollDTOS> employeePayroll = PayrollServices.getEmployeePayrolls();
+        employeePayroll = PayrollServices.getEmployeePayrolls();
 
         for (EmployeePayrollDTOS employeePayrollDto : employeePayroll) {
             System.out.println(employeePayrollDto);
@@ -36,5 +38,19 @@ public class Main {
         for (PayrollAnalysisDTO payrollAnalysisDto : payrollAnalysis) {
             System.out.println(payrollAnalysisDto);
         }
+
+
+        // UC 7
+        Employee sahil = new Employee(0, "Sahil", "M", Date.valueOf("2023-03-15"), 1);
+        Contacts sahilContact = new Contacts(0, "9876543210", "sahil.johnson@example.com", "123 Main St, New York", 0);
+        Payroll sahilPayroll = new Payroll(0, 5000.00, 300.00, 4700.00, 500.00, 4200.00, 5200.00, 0);
+        PayrollServices.addEmployeeWithDetails(sahil, sahilContact, sahilPayroll);
+
+        //UC 8
+        PayrollServices.deleteEmployee(2);
+
+
+        //UC 9
+        PayrollServices.removeEmployee(3);
     }
 }
